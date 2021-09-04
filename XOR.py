@@ -1,29 +1,33 @@
 import binascii 
+import argparse
+from datetime import datetime
 
-key = bytes([0x41,0x41])
+    
+def XOR(key,binary, clearkey):
+    now = datetime.now()
+    time = now.strftime("%Y%m%d%H%M%S")
 
-def xorFrom(key):
     combined = bytearray()
-    with open("Some\\Path\\file.bin", "rb") as f:
+    with open(binary, "rb") as f:
         while (content := f.read(1)):
             result = [ chr(a ^ b) for (a,b) in zip(content,key) ]
             combined += bytes(result.pop(0), encoding='latin1')
-    
-    file = open("Some\\Path\\b.bin","wb")
+                        
+    file = open("encoded" + time + ".bin","wb")
     file.write(combined)
+    print("XOR encrypted binary: " + binary)
+    print("XOR encrypted with key: " + clearkey)
+    print("Output file: " + "encoded" + time + ".bin")
     
-def xorTo(key):
-    combined = bytearray()
-    with open("Some\\Path\\beacon.bin", "rb") as f:
-        while (content := f.read(1)):
-            result = [ chr(a ^ b) for (a,b) in zip(content,key) ]
-            combined += bytes(result.pop(0), encoding='latin1')
-            
-        #print(combined)
-            
-    file = open("Some\\Path\\a.bin","wb")
-    file.write(combined)
+def main():
     
-    
-xorTo(key)
-xorFrom(key)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-k", "--key", dest= "key", help="Key to XOR. Wrap in quotes to be safe. Doesnt like special characters.", required=True)
+    parser.add_argument("-b", "--bin", dest= "path", help="Binary path. Should work with any binary.", required=True)
+    args = parser.parse_args()
+
+    toBytes = args.key.encode('latin1')
+    XOR(toBytes, args.binary, args.key)
+
+if __name__ == "__main__":
+    main()
