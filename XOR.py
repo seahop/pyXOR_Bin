@@ -23,7 +23,7 @@ def main():
     
     parser = argparse.ArgumentParser()
     parser.add_argument("-k", "--key", dest= "key", help="Key to XOR. Wrap in quotes to be safe. Doesnt like special characters.", required=True)
-    parser.add_argument("-b", "--bin", dest= "path", help="Binary path. Should work with any binary.", required=True)
+    parser.add_argument("-b", "--bin", dest= "binary", help="Binary path. Should work with any binary.", required=True)
     args = parser.parse_args()
 
     toBytes = args.key.encode('latin1')
